@@ -19,6 +19,13 @@ defmodule PohmeedorWeb.TimerControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
+  describe "index" do
+    test "lists all timers", %{conn: conn} do
+      conn = get(conn, Routes.timer_path(conn, :index))
+      assert json_response(conn, 200)["data"] == []
+    end
+  end
+
   describe "create timer" do
     test "renders timer when data is valid", %{conn: conn} do
       conn = post(conn, Routes.timer_path(conn, :create), timer: @create_attrs)
