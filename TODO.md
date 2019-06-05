@@ -1,5 +1,6 @@
 * get timer by link (non human readable is enough)
 * add new timer
+    * generate id by client
 * timers list (could grow looooong)
 * get timer by name
 * cors

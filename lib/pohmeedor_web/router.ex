@@ -7,5 +7,7 @@ defmodule PohmeedorWeb.Router do
 
   scope "/api", PohmeedorWeb do
     pipe_through :api
+
+    resources "/timers", TimerController
   end
 end
