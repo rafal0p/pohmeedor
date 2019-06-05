@@ -24,20 +24,4 @@ defmodule PohmeedorWeb.TimerController do
     timer = Core.get_timer!(id)
     render(conn, "show.json", timer: timer)
   end
-
-  def update(conn, %{"id" => id, "timer" => timer_params}) do
-    timer = Core.get_timer!(id)
-
-    with {:ok, %Timer{} = timer} <- Core.update_timer(timer, timer_params) do
-      render(conn, "show.json", timer: timer)
-    end
-  end
-
-  def delete(conn, %{"id" => id}) do
-    timer = Core.get_timer!(id)
-
-    with {:ok, %Timer{}} <- Core.delete_timer(timer) do
-      send_resp(conn, :no_content, "")
-    end
-  end
 end

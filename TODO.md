@@ -1,5 +1,5 @@
 TODO:
-* once added timer cannot be modified
+* start_time can now contain datetime without timezone. Enforce either full information, or accept epoch.
 * generate id by client
 * cors
 * ssl (mixed content)
@@ -16,3 +16,4 @@ TO DECIDE:
 
 DONE:
 * get timer by link (non human readable is enough)
+* once added timer cannot be modified
