@@ -10,3 +10,5 @@
 * sign in / sign up in order to be able to clear cookies and still be yourself
 * group users to teams
 * non-public timer (for team-members only)
+
+should start_time be posted or inserted server-side?
