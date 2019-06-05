@@ -2,7 +2,6 @@ defmodule PohmeedorWeb.TimerControllerTest do
   use PohmeedorWeb.ConnCase
 
   alias Pohmeedor.Core
-  alias Pohmeedor.Core.Timer
 
   @create_attrs %{
     duration: 42,
@@ -39,10 +38,5 @@ defmodule PohmeedorWeb.TimerControllerTest do
       conn = post(conn, Routes.timer_path(conn, :create), timer: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
-  end
-
-  defp create_timer(_) do
-    timer = fixture(:timer)
-    {:ok, timer: timer}
   end
 end
