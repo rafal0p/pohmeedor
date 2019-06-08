@@ -30,7 +30,7 @@ defmodule PohmeedorWeb.TimerControllerTest do
   describe "create timer" do
     test "renders timer when data is valid", %{conn: conn} do
       conn = post(conn, Routes.timer_path(conn, :create), timer: @create_attrs)
-      assert conn.status == 201
+      assert "" == response(conn, 201)
 
       conn = get(conn, Routes.timer_path(conn, :show, @create_attrs.id))
 
