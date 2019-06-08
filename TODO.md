@@ -1,5 +1,6 @@
 TODO:
 * generate id by client
+* unique id constraint violation should return existing entity (based on that views can decide if reinsert with different id or it's a case of double POST and can be safely ignored)
 * start_time can now contain datetime without timezone. Enforce either full information, or accept epoch.
 * cors
 * ssl (mixed content)

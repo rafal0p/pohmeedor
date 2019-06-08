@@ -2,7 +2,7 @@ defmodule Pohmeedor.Core.Timer do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key {:id, :binary_id, autogenerate: false}
   @foreign_key_type :binary_id
   schema "timers" do
     field :duration, :integer
@@ -13,7 +13,8 @@ defmodule Pohmeedor.Core.Timer do
   @doc false
   def changeset(timer, attrs) do
     timer
-    |> cast(attrs, [:start_time, :duration, :name])
-    |> validate_required([:start_time, :duration, :name])
+    |> cast(attrs, [:id, :start_time, :duration, :name])
+    |> validate_required([:id, :start_time, :duration, :name])
+    |> unique_constraint(:id, name: "timers_pkey")
   end
 end
