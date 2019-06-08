@@ -12,12 +12,9 @@ defmodule PohmeedorWeb.TimerController do
   end
 
   def create(conn, %{"timer" => timer_params}) do
-    timer_params = Map.put(timer_params, "id", Ecto.UUID.generate())
     with {:ok, %Timer{} = timer} <- Core.create_timer(timer_params) do
       conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.timer_path(conn, :show, timer))
-      |> render("show.json", timer: timer)
+      |> send_resp(:created, "")
     end
   end
 
