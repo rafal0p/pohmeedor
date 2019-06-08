@@ -1,6 +1,6 @@
 TODO:
-* start_time can now contain datetime without timezone. Enforce either full information, or accept epoch.
 * generate id by client
+* start_time can now contain datetime without timezone. Enforce either full information, or accept epoch.
 * cors
 * ssl (mixed content)
 * deploy somewhere (heroku, gigalixir)

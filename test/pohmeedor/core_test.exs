@@ -6,7 +6,11 @@ defmodule Pohmeedor.CoreTest do
   describe "timers" do
     alias Pohmeedor.Core.Timer
 
-    @valid_attrs %{duration: 42, name: "some name", start_time: ~N[2010-04-17 14:00:00.000000]}
+    @valid_attrs %{
+      duration: 42,
+      name: "some name",
+      start_time: ~N[2010-04-17 14:00:00.000000]
+    }
     @invalid_attrs %{duration: nil, name: nil, start_time: nil}
 
     def timer_fixture(attrs \\ %{}) do
@@ -30,9 +34,9 @@ defmodule Pohmeedor.CoreTest do
 
     test "create_timer/1 with valid data creates a timer" do
       assert {:ok, %Timer{} = timer} = Core.create_timer(@valid_attrs)
-      assert timer.duration == 42
-      assert timer.name == "some name"
-      assert timer.start_time == ~N[2010-04-17 14:00:00.000000]
+      assert timer.duration == @valid_attrs.duration
+      assert timer.name == @valid_attrs.name
+      assert timer.start_time == @valid_attrs.start_time
     end
 
     test "create_timer/1 with invalid data returns error changeset" do
