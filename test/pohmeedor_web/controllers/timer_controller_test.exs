@@ -6,10 +6,9 @@ defmodule PohmeedorWeb.TimerControllerTest do
   @create_attrs %{
     id: Ecto.UUID.generate(),
     duration: 42,
-    name: "some name",
-    start_time: ~N[2010-04-17 14:00:00.000000]
+    name: "some name"
   }
-  @invalid_attrs %{duration: nil, name: nil, start_time: nil}
+  @invalid_attrs %{id: nil, duration: nil, name: nil}
 
   def fixture(:timer) do
     {:ok, timer} = Core.create_timer(@create_attrs)
@@ -34,12 +33,15 @@ defmodule PohmeedorWeb.TimerControllerTest do
 
       conn = get(conn, Routes.timer_path(conn, :show, @create_attrs.id))
 
-      assert %{
-               "id" => @create_attrs.id,
-               "duration" => @create_attrs.duration,
-               "name" => @create_attrs.name,
-               "start_time" => NaiveDateTime.to_iso8601(@create_attrs.start_time)
-             } == json_response(conn, 200)["data"]
+      assert res = json_response(conn, 200)["data"]
+      assert res["id"] == @create_attrs.id
+      assert res["duration"] == @create_attrs.duration
+      assert res["name"] == @create_attrs.name
+      assert NaiveDateTime.diff(
+               NaiveDateTime.utc_now(),
+               NaiveDateTime.from_iso8601!(res["start_time"])
+             ) < 2
+
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

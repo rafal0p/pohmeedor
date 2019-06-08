@@ -7,12 +7,11 @@ defmodule Pohmeedor.CoreTest do
     alias Pohmeedor.Core.Timer
 
     @valid_attrs %{
-      id: Ecto.UUID.generate,
-      duration: 42,
-      name: "some name",
-      start_time: ~N[2010-04-17 14:00:00.000000]
+      "id" => Ecto.UUID.generate,
+      "duration" => 42,
+      "name" => "some name"
     }
-    @invalid_attrs %{duration: nil, name: nil, start_time: nil}
+    @invalid_attrs %{"id" => nil, "duration" => nil, "name" => nil}
 
     def timer_fixture(attrs \\ %{}) do
       {:ok, timer} =
@@ -34,11 +33,12 @@ defmodule Pohmeedor.CoreTest do
     end
 
     test "create_timer/1 with valid data creates a timer" do
-      assert {:ok, %Timer{} = timer} = Core.create_timer(@valid_attrs)
-      assert timer.id == @valid_attrs.id
-      assert timer.duration == @valid_attrs.duration
-      assert timer.name == @valid_attrs.name
-      assert timer.start_time == @valid_attrs.start_time
+      now = NaiveDateTime.utc_now()
+      assert {:ok, %Timer{} = timer} = Core.create_timer(@valid_attrs, now)
+      assert timer.id == @valid_attrs["id"]
+      assert timer.duration == @valid_attrs["duration"]
+      assert timer.name == @valid_attrs["name"]
+      assert timer.start_time == now
     end
 
     test "create_timer/1 with invalid data returns error changeset" do

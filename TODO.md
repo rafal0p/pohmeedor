@@ -1,7 +1,6 @@
 TODO:
-* generate id by client
+* generate start_time server-side
 * unique id constraint violation should return existing entity (based on that views can decide if reinsert with different id or it's a case of double POST and can be safely ignored)
-* start_time can now contain datetime without timezone. Enforce either full information, or accept epoch.
 * cors
 * ssl (mixed content)
 * deploy somewhere (heroku, gigalixir)
@@ -14,10 +13,11 @@ TODO:
 * group users to teams
 * non-public timer (for team-members only)
 
-TO DECIDE:
-* should start_time be posted or inserted server-side?
-
 DONE:
 * get timer by link (non human readable is enough)
 * once added timer cannot be modified
 * timers list (could grow looooong)
+* generate id by client
+
+DECIDED:
+* start_time must be generated server-side. who knows what clock skew clients have.
