@@ -35,7 +35,28 @@ defmodule Pohmeedor.Core do
       ** (Ecto.NoResultsError)
 
   """
-  def get_timer!(id), do: Repo.get!(Timer, id)
+  def get_timer!(id, now \\ DateTime.utc_now()) do
+    Repo.get!(Timer, id)
+    |> add_completed_percentage(now)
+  end
+
+  defp add_completed_percentage(timer, now) do
+    Map.put(timer, :completed_percentage, completion_of(timer, now))
+  end
+
+  defp completion_of(timer, now) do
+    completed_millis = DateTime.diff(now, timer.start_time, :millisecond)
+    completed_percentage = completed_millis / timer.duration
+    cap(completed_percentage, 0, 1)
+  end
+
+  defp cap(n, min, max) do
+    cond do
+      n < min -> min
+      n > max -> max
+      true -> n
+    end
+  end
 
   @doc """
   Creates a timer.
@@ -49,11 +70,7 @@ defmodule Pohmeedor.Core do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_timer(attrs \\ %{}) do
-    create_timer(attrs, DateTime.utc_now())
-  end
-
-  def create_timer(attrs, now) do
+  def create_timer(attrs, now \\ DateTime.utc_now()) do
     attrs = Map.put(attrs, "start_time", now)
     %Timer{}
     |> Timer.changeset(attrs)
