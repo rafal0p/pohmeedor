@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :pohmeedor, PohmeedorWeb.Endpoint,
-  url: [scheme: "https", host: "salty-coast-20562", port: 443],
+  url: [scheme: "https", host: "pohmeedor.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 # Do not print debug messages in production
