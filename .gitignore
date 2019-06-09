@@ -27,6 +27,9 @@ pohmeedor-*.tar
 # this depending on your deployment strategy.
 /priv/static/
 
+# Secrets
+/config/*.secret.exs
+
 # IntelliJ
 *.iml
 .idea

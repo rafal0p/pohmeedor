@@ -1,9 +1,11 @@
 TODO:
-* generate start_time server-side
-* unique id constraint violation should return existing entity (based on that views can decide if reinsert with different id or it's a case of double POST and can be safely ignored)
+* deploy somewhere (heroku, gigalixir)
 * cors
 * ssl (mixed content)
-* deploy somewhere (heroku, gigalixir)
+* for GET return duration and percentage, not start_time
+* mock utc_now in tests instead of checking 2 seconds diff
+* make Timer.name optional
+* unique id constraint violation should return existing entity (based on that views can decide if reinsert with different id or it's a case of double POST and can be safely ignored)
 * get timer by name
 * document API by swagger
 * list of only active timers
@@ -14,6 +16,7 @@ TODO:
 * non-public timer (for team-members only)
 
 DONE:
+* generate start_time server-side
 * get timer by link (non human readable is enough)
 * once added timer cannot be modified
 * timers list (could grow looooong)
