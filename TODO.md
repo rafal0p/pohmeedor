@@ -1,7 +1,5 @@
 TODO:
-* deploy somewhere (heroku, gigalixir)
 * cors
-* ssl (mixed content)
 * for GET return duration and percentage, not start_time
 * mock utc_now in tests instead of checking 2 seconds diff
 * make Timer.name optional
@@ -21,6 +19,7 @@ DONE:
 * once added timer cannot be modified
 * timers list (could grow looooong)
 * generate id by client
+* deployed to heroku
 
 DECIDED:
 * start_time must be generated server-side. who knows what clock skew clients have.
