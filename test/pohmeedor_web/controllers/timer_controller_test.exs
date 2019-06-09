@@ -33,15 +33,18 @@ defmodule PohmeedorWeb.TimerControllerTest do
 
       conn = get(conn, Routes.timer_path(conn, :show, @create_attrs.id))
 
-      assert res = json_response(conn, 200)["data"]
-      assert res["id"] == @create_attrs.id
-      assert res["duration"] == @create_attrs.duration
-      assert res["name"] == @create_attrs.name
-      assert NaiveDateTime.diff(
-               NaiveDateTime.utc_now(),
-               NaiveDateTime.from_iso8601!(res["start_time"])
-             ) < 2
+      assert %{
+               "id" => id,
+               "duration" => duration,
+               "name" => name,
+               "start_time" => start_time
+             } = json_response(conn, 200)["data"]
+      {:ok, start_time, _utc_offset} = DateTime.from_iso8601(start_time)
 
+      assert id == @create_attrs.id
+      assert duration == @create_attrs.duration
+      assert name == @create_attrs.name
+      assert DateTime.diff(DateTime.utc_now(), start_time, :second) < 2
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

@@ -7,7 +7,7 @@ defmodule Pohmeedor.Core.Timer do
   schema "timers" do
     field :duration, :integer
     field :name, :string
-    field :start_time, :naive_datetime_usec
+    field :start_time, :utc_datetime_usec
   end
 
   @doc false

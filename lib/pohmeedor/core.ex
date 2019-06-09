@@ -50,7 +50,7 @@ defmodule Pohmeedor.Core do
 
   """
   def create_timer(attrs \\ %{}) do
-    create_timer(attrs, NaiveDateTime.utc_now())
+    create_timer(attrs, DateTime.utc_now())
   end
 
   def create_timer(attrs, now) do

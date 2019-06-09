@@ -33,7 +33,7 @@ defmodule Pohmeedor.CoreTest do
     end
 
     test "create_timer/1 with valid data creates a timer" do
-      now = NaiveDateTime.utc_now()
+      now = DateTime.utc_now()
       assert {:ok, %Timer{} = timer} = Core.create_timer(@valid_attrs, now)
       assert timer.id == @valid_attrs["id"]
       assert timer.duration == @valid_attrs["duration"]

@@ -11,7 +11,7 @@ defmodule PohmeedorWeb.TimerController do
   end
 
   def create(conn, %{"timer" => timer_params}) do
-    with {:ok, _} <- Core.create_timer(timer_params, NaiveDateTime.utc_now()) do
+    with {:ok, _} <- Core.create_timer(timer_params, DateTime.utc_now()) do
       conn
       |> send_resp(:created, "")
     end
