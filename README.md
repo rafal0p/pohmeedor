@@ -17,3 +17,5 @@ API is deployed on `https://pohmeedor.herokuapp.com`
 `duration` is in milliseconds, you are responsible for generating UUID
 * Getting timer: `GET /api/timers/{id}`
 * Getting all timers: `GET /api/timers`
+
+For unknown reason database connection sometimes break for couple of seconds. Until the issue is resolved best workaround is to retry after HTTP 500 (even couple of times).
