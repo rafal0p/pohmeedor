@@ -1,19 +1,19 @@
 # Pohmeedor
 
-To start your Phoenix server:
+Do you use Pomodoro Technique on the daily basis? Do you work remotely? Do you want to inform all members of your team when you are doing creative work? If yes - this API can help you!
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server`
+## Usage
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+API is deployed on `https://pohmeedor.herokuapp.com`
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+* Adding timer: `POST /api/timers`:
+```json
+{
+  "id": "9d8f128f-e6ec-413d-b4d0-31fa948bab2b",
+  "duration": 60000,
+  "name": "my awesome timer"
+}
+```
+`duration` is in milliseconds, you are responsible for generating UUID
+* Getting timer: `GET /api/timers/{id}`
+* Getting all timers: `GET /api/timers`
