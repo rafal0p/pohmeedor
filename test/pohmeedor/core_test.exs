@@ -23,19 +23,44 @@ defmodule Pohmeedor.CoreTest do
     end
 
     test "list_timers/0 returns all timers" do
-      timer = timer_fixture()
-      assert Core.list_timers() == [timer]
+      timersToPersist = (0..5)
+                        |> Enum.map(&random_timer/1)
+                        |> Enum.sort_by(fn %{"id" => id} -> id end)
+
+      Enum.each(timersToPersist, &(Core.create_timer(&1)))
+
+      Core.list_timers()
+      |> Enum.sort_by(&(&1.id))
+      |> Enum.zip(timersToPersist)
+      |> Enum.each(
+           fn {persisted, toPersist} ->
+             assert_timers_equal(persisted, toPersist)
+           end
+         )
+    end
+
+    defp random_timer(_) do
+      %{
+        "id" => Ecto.UUID.generate(),
+        "duration" => Enum.random(0..10_000),
+        "name" => Ecto.UUID.generate()
+                  |> Base.url_encode64
+                  |> binary_part(0, 5)
+      }
     end
 
     test "get_timer!/1 returns the timer with given id" do
       {:ok, %{id: id}} = Core.create_timer(@valid_attrs)
-
       timer = Core.get_timer!(id)
-      assert timer.id == @valid_attrs["id"]
-      assert timer.duration == @valid_attrs["duration"]
-      assert timer.name == @valid_attrs["name"]
+      assert_timers_equal(timer, @valid_attrs)
+    end
+
+    defp assert_timers_equal(timer, map) do
+      assert timer.id == map["id"]
+      assert timer.duration == map["duration"]
+      assert timer.name == map["name"]
       assert timer.start_time.__struct__ == DateTime
-      assert timer.completed_percentage > 0
+      assert timer.completed_percentage >= 0
     end
 
     for {seconds_to_the_past, duration, percentage} <- [
@@ -50,7 +75,11 @@ defmodule Pohmeedor.CoreTest do
       and #{duration} duration" do
         past_timestamp = DateTime.utc_now()
                          |> DateTime.add(-unquote(seconds_to_the_past) * 1000, :millisecond)
-        {:ok, %{id: id}} = Core.create_timer(%{@valid_attrs | "duration" => unquote(duration) * 1000}, past_timestamp)
+
+        {:ok, %{id: id}} = Core.create_timer(
+          %{@valid_attrs | "duration" => unquote(duration) * 1000},
+          past_timestamp
+        )
 
         timer = Core.get_timer!(id)
         assert_in_delta timer.completed_percentage, unquote(percentage), 0.01

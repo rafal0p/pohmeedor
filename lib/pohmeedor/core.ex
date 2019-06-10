@@ -17,8 +17,9 @@ defmodule Pohmeedor.Core do
       [%Timer{}, ...]
 
   """
-  def list_timers do
+  def list_timers(now \\ DateTime.utc_now()) do
     Repo.all(Timer)
+    |> Enum.map(&(add_completed_percentage(&1, now)))
   end
 
   @doc """
