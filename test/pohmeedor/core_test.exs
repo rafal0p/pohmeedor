@@ -39,7 +39,7 @@ defmodule Pohmeedor.CoreTest do
     end
 
     for {seconds_to_the_past, duration, percentage} <- [
-      {510, 100, 0.5},
+      {50, 100, 0.5},
       {0, 100, 0},
       {100, 100, 1},
       {200, 100, 1},
