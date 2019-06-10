@@ -37,6 +37,7 @@ defmodule PohmeedorWeb.TimerControllerTest do
                "id" => id,
                "duration" => duration,
                "name" => name,
+               "completed_percentage" => completed_percentage,
                "start_time" => start_time
              } = json_response(conn, 200)["data"]
       {:ok, start_time, _utc_offset} = DateTime.from_iso8601(start_time)
@@ -45,6 +46,7 @@ defmodule PohmeedorWeb.TimerControllerTest do
       assert duration == @create_attrs.duration
       assert name == @create_attrs.name
       assert DateTime.diff(DateTime.utc_now(), start_time, :second) < 2
+      assert completed_percentage < 0.1
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

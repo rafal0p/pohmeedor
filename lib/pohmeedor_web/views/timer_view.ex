@@ -15,6 +15,7 @@ defmodule PohmeedorWeb.TimerView do
       id: timer.id,
       start_time: timer.start_time,
       duration: timer.duration,
+      completed_percentage: timer.completed_percentage,
       name: timer.name
     }
   end
