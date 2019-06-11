@@ -9,9 +9,11 @@ API is deployed on `https://pohmeedor.herokuapp.com`
 * Adding timer: `POST /api/timers`:
 ```json
 {
-  "id": "9d8f128f-e6ec-413d-b4d0-31fa948bab2b",
-  "duration": 60000,
-  "name": "my awesome timer"
+  "timer": {
+    "id": "9d8f128f-e6ec-413d-b4d0-31fa948bab2b",
+    "duration": 60000,
+    "name": "my awesome timer"
+  }
 }
 ```
 `duration` is in milliseconds, you are responsible for generating UUID
