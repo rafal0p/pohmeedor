@@ -106,5 +106,11 @@ defmodule Pohmeedor.CoreTest do
       {_, [constraint: constraint, constraint_name: _]} = changeset.errors[:id]
       assert constraint == :unique
     end
+
+    test "Timer.name is optional" do
+    {:ok, %Timer{} = created} = Core.create_timer(Map.delete(@valid_attrs, "name"))
+
+    assert created.id == @valid_attrs["id"]
+    end
   end
 end

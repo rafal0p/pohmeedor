@@ -14,7 +14,7 @@ defmodule Pohmeedor.Core.Timer do
   def changeset(timer, attrs) do
     timer
     |> cast(attrs, [:id, :start_time, :duration, :name])
-    |> validate_required([:id, :start_time, :duration, :name])
+    |> validate_required([:id, :start_time, :duration])
     |> unique_constraint(:id, name: "timers_pkey")
   end
 end
