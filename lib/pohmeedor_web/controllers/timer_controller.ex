@@ -5,6 +5,11 @@ defmodule PohmeedorWeb.TimerController do
 
   action_fallback PohmeedorWeb.FallbackController
 
+  def index(conn, %{"name" => name}) do
+    timers = Core.list_timers_by_name(name)
+    render(conn, "index.json", timers: timers)
+  end
+
   def index(conn, _params) do
     timers = Core.list_timers()
     render(conn, "index.json", timers: timers)

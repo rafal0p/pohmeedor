@@ -3,6 +3,7 @@ defmodule Pohmeedor.CoreTest do
 
   alias Pohmeedor.Core
   alias Pohmeedor.Core.Timer
+  alias Pohmeedor.TimerStubs
 
   @valid_attrs %{
     "id" => Ecto.UUID.generate,
@@ -42,8 +43,7 @@ defmodule Pohmeedor.CoreTest do
 
   describe "timers retrieval" do
     test "list_timers/0 returns all timers" do
-      timers_to_persist = (0..5)
-                          |> Enum.map(&random_timer/1)
+      timers_to_persist = TimerStubs.random_timers(5)
                           |> Enum.sort_by(fn %{"id" => id} -> id end)
 
       Enum.each(timers_to_persist, &(Core.create_timer(&1)))
@@ -59,38 +59,22 @@ defmodule Pohmeedor.CoreTest do
     end
 
     test "list_timers_by_name/1 filters by name" do
-      name = random_name()
-      timers_with_given_name = (0..3)
-                               |> Enum.map(&random_timer/1)
-                               |> Enum.map(fn timer -> %{timer | "name" => name} end)
-      timers_with_random_name = (0..3)
-                                |> Enum.map(&random_timer/1)
+      name = TimerStubs.random_name()
+      timers_with_given_name = TimerStubs.random_timers(3)
+                               |> TimerStubs.with_name(name)
 
-      Enum.each(timers_with_given_name ++ timers_with_random_name, &(Core.create_timer(&1)))
+      Enum.each(
+        TimerStubs.random_timers(3) ++
+        timers_with_given_name ++
+        TimerStubs.random_timers(4),
+        &(Core.create_timer(&1))
+      )
 
-      persisted = Core.list_timers_by_name(name)
-      |> Enum.map(&(Map.take(&1, [:id, :name, :duration])))
-      |> Enum.map(&(stringify_keys(&1)))
+      filtered_timers = Core.list_timers_by_name(name)
+                  |> Enum.map(&(Map.take(&1, [:id, :name, :duration])))
+                  |> Enum.map(&(TimerStubs.stringify_keys(&1)))
 
-      Enum.each(timers_with_given_name, fn timer -> assert timer in persisted end)
-    end
-
-    defp stringify_keys(map) do
-      for {key, val} <- map, into: %{}, do: {Atom.to_string(key), val}
-    end
-
-    defp random_timer(_) do
-      %{
-        "id" => Ecto.UUID.generate(),
-        "duration" => Enum.random(0..10_000),
-        "name" => random_name()
-      }
-    end
-
-    defp random_name() do
-      Ecto.UUID.generate()
-      |> Base.url_encode64
-      |> binary_part(0, 5)
+      Enum.each(timers_with_given_name, fn timer -> assert timer in filtered_timers end)
     end
 
     test "get_timer!/1 returns the timer with given id" do

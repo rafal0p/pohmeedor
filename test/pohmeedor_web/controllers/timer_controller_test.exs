@@ -2,6 +2,7 @@ defmodule PohmeedorWeb.TimerControllerTest do
   use PohmeedorWeb.ConnCase
 
   alias Pohmeedor.Core
+  alias Pohmeedor.TimerStubs
 
   @create_attrs %{
     id: Ecto.UUID.generate(),
@@ -23,6 +24,21 @@ defmodule PohmeedorWeb.TimerControllerTest do
     test "lists all timers", %{conn: conn} do
       conn = get(conn, Routes.timer_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
+    end
+
+    test "list timers with given name", %{conn: conn} do
+      name = TimerStubs.random_name()
+
+      TimerStubs.random_timers(5)
+      |> Enum.each(&Core.create_timer/1)
+
+      TimerStubs.random_timers(3)
+      |> TimerStubs.with_name(name)
+      |> Enum.each(&Core.create_timer/1)
+
+      conn = get(conn, Routes.timer_path(conn, :index, name: name))
+      assert timers = json_response(conn, 200)["data"]
+      assert Enum.count(timers) == 3
     end
   end
 
@@ -46,7 +62,7 @@ defmodule PohmeedorWeb.TimerControllerTest do
       assert duration == @create_attrs.duration
       assert name == @create_attrs.name
       assert DateTime.diff(DateTime.utc_now(), start_time, :second) < 2
-      assert completed_percentage < 0.1
+      assert completed_percentage < 0.5
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
