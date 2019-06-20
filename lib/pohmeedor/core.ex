@@ -22,6 +22,13 @@ defmodule Pohmeedor.Core do
     |> Enum.map(&(add_completed_percentage(&1, now)))
   end
 
+  def list_timers_by_name(name, now \\ DateTime.utc_now()) do
+    Timer
+    |> where([timer], timer.name == ^name)
+    |> Repo.all()
+    |> Enum.map(&(add_completed_percentage(&1, now)))
+  end
+
   @doc """
   Gets a single timer.
 

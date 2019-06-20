@@ -42,30 +42,55 @@ defmodule Pohmeedor.CoreTest do
 
   describe "timers retrieval" do
     test "list_timers/0 returns all timers" do
-      timersToPersist = (0..5)
-                        |> Enum.map(&random_timer/1)
-                        |> Enum.sort_by(fn %{"id" => id} -> id end)
+      timers_to_persist = (0..5)
+                          |> Enum.map(&random_timer/1)
+                          |> Enum.sort_by(fn %{"id" => id} -> id end)
 
-      Enum.each(timersToPersist, &(Core.create_timer(&1)))
+      Enum.each(timers_to_persist, &(Core.create_timer(&1)))
 
       Core.list_timers()
       |> Enum.sort_by(&(&1.id))
-      |> Enum.zip(timersToPersist)
+      |> Enum.zip(timers_to_persist)
       |> Enum.each(
-           fn {persisted, toPersist} ->
-             assert_timers_equal(persisted, toPersist)
+           fn {persisted, to_persist} ->
+             assert_timers_equal(persisted, to_persist)
            end
          )
+    end
+
+    test "list_timers_by_name/1 filters by name" do
+      name = random_name()
+      timers_with_given_name = (0..3)
+                               |> Enum.map(&random_timer/1)
+                               |> Enum.map(fn timer -> %{timer | "name" => name} end)
+      timers_with_random_name = (0..3)
+                                |> Enum.map(&random_timer/1)
+
+      Enum.each(timers_with_given_name ++ timers_with_random_name, &(Core.create_timer(&1)))
+
+      persisted = Core.list_timers_by_name(name)
+      |> Enum.map(&(Map.take(&1, [:id, :name, :duration])))
+      |> Enum.map(&(stringify_keys(&1)))
+
+      Enum.each(timers_with_given_name, fn timer -> assert timer in persisted end)
+    end
+
+    defp stringify_keys(map) do
+      for {key, val} <- map, into: %{}, do: {Atom.to_string(key), val}
     end
 
     defp random_timer(_) do
       %{
         "id" => Ecto.UUID.generate(),
         "duration" => Enum.random(0..10_000),
-        "name" => Ecto.UUID.generate()
-                  |> Base.url_encode64
-                  |> binary_part(0, 5)
+        "name" => random_name()
       }
+    end
+
+    defp random_name() do
+      Ecto.UUID.generate()
+      |> Base.url_encode64
+      |> binary_part(0, 5)
     end
 
     test "get_timer!/1 returns the timer with given id" do
